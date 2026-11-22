@@ -8,10 +8,10 @@ class MoveRobotClient(Node):
     def __init__(self):
         super().__init__('srv_client')
         self.cli = self.create_client(MoveRobot, '/move_robots')
-        
+
         while not self.cli.wait_for_service(timeout_sec=1.0):
             self.get_logger().info('Waiting for service...')
-            
+
         self.req = MoveRobot.Request()
 
     def send_request(self, a, b, c, d):
@@ -22,7 +22,7 @@ class MoveRobotClient(Node):
 
         self.future = self.cli.call_async(self.req)
         rclpy.spin_until_future_complete(self, self.future)
-        
+
         return self.future.result()
 
 
@@ -30,7 +30,10 @@ def main():
     rclpy.init()
     client = MoveRobotClient()
     response = client.send_request(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
-    client.get_logger().info(f'Result: {response.result_pose}')
+    pose = response.result_pose
+    client.get_logger().info(
+        f'Result: {pose.x} {pose.y} {response.success}'
+    )
     client.destroy_node()
     rclpy.shutdown()
 

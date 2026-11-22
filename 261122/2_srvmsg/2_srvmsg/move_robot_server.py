@@ -12,17 +12,19 @@ class MoveRobotServer(Node):
         self.get_logger().info('Srv Server Ready.')
 
     def srv_callback(self, request, response):
-        response.result_pose.current_pose.x
-        response.result_pose.current_pose.y
-        response.result_pose.current_pose.theta
-
-        # request.current_pose.x + request.distance * math.cos(request.current_pose.theta)  request.current_pose.y + request.distance * math.sin(request.current_pose.theta)
-
+        pose = request.current_pose
+        distance = request.distance
+        result = response.result_pose
+        result.x = pose.x + distance * math.cos(pose.theta)
+        result.y = pose.y + distance * math.sin(pose.theta)
+        result.theta = pose.theta
         response.success = True
-        
-        self.get_logger().info(f'Incoming request\na: {request.a.x}, b: {request.b.y}, c: {request.c.theta}, d: {request.d.distance}')
+
+        self.get_logger().info(
+            f'Incoming request: x={pose.x}, y={pose.y}, theta={pose.theta}, distance={distance}'
+        )
         self.get_logger().info(f'Sending back response: [{response.result_pose}, {response.success}]')
-        
+
         return response
 
 
