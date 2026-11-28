@@ -26,9 +26,11 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'talker = 1_pubsub.talker:main',   # 수정
-            #'processor = 1_pubsub.processor:main'
-            'listener = 1_pubsub.listener:main',   # 수정
+            'talker = 1_pubsub.talker:main',
+            'processor = 1_pubsub.processor:main',
+            'listener = 1_pubsub.listener:main',
+            'publisher = 1_pubsub.publisher:main',
+            'subscriber = 1_pubsub.subscriber:main',
         ],
     },
 )
