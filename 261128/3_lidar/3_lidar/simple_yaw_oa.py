@@ -12,8 +12,8 @@ class SimpleYawObstacleAvoider(Node):
         super().__init__('simple_yaw_obstacle_avoider')
 
         self.cmd_pub = self.create_publisher(TwistStamped, '/cmd_vel', 10)
-        self.scan_sub = self.create_publisher(LaserScan, '/scan',self.scan_callback, 10) 
-        self.odom_sub = self.create_publisher(Odometry, '/odom',self.odom_callback, 10) 
+        self.scan_sub = self.create_subscription(LaserScan, '/scan',self.scan_callback, 10) 
+        self.odom_sub = self.create_subscription(Odometry, '/odom',self.odom_callback, 10) 
 
         self.state = "MOVE"
 

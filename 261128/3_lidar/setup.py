@@ -24,6 +24,10 @@ setup(
     },
     entry_points={
         'console_scripts': [
+            'simple_oa = 3_lidar.simple_oa:main',
+            'simple_yaw_oa = 3_lidar.simple_yaw_oa:main',
+            'simple_reverse_oa = 3_lidar.simple_reverse_oa:main',
+
         ],
     },
 )

@@ -9,8 +9,8 @@ class SimpleObstacleAvoider(Node):
     def __init__(self):
         super().__init__('simple_obstacle_avoider')
 
-        self.cmd_pub = ...
-        self.scan_sub = ...
+        self.cmd_pub = self.create_publisher(TwistStamped, '/cmd_vel', 10)
+        self.scan_sub = self.create_subscription(LaserScan, '/scan',self.scan_callback, 10)
 
         self.front_threshold = 0.25
         self.linear_speed = 0.2
@@ -18,27 +18,24 @@ class SimpleObstacleAvoider(Node):
 
     def scan_callback(self, scan: LaserScan):
         left_vals = [distance for distance in scan.ranges[:31] if math.isfinite(distance)]
-        left_avg = sum(left_vals) / 30
+        left_avg = sum(left_vals) / len(left_vals) if left_vals else 0.0
 
         right_vals = [distance for distance in scan.ranges[-30:] if math.isfinite(distance)]
-        right_avg = sum(right_vals) / 30
+        right_avg = sum(right_vals) / len(right_vals) if right_vals else 0.0
 
         front_vals = left_vals + right_vals
         front_min = min(front_vals) if front_vals else float('inf')
 
-        ts = TwistStamped() #message envelop / find needed value and insert
+        ts = TwistStamped() 
 
-        if front_vals > self.front_threshold:
-            Go!!
-            #ts.djfklsfh.djfklsfh.dataname = ...
-            #ts._ = ...
+        if front_min > self.front_threshold:
+            ts.twist.linear.x = self.linear_speed 
+            ts.twist.angular.z = 0.0
         else:
-            stop!!
-            if (left_avg > right_avg) turn left 30 radian!! and go!!
-            else turn right 30 radian!! and go!!
+            ts.twist.linear.x = 0.0
+            ts.twist.angular.z = self.angular_speed
 
-        ...  # 값이 설정된 TwistStamped 메세지를 Publish
-        #self.publisher_.publish(ts)
+        self.cmd_pub.publish(ts)
 
 
 def main():
